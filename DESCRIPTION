@@ -1,0 +1,26 @@
+Package: rSimSpatialProcessSampling
+Type: Package
+Title: Simulate sampling a spatial process
+Version: 2023.05.10
+Author: William T. Stockhausen
+Maintainer: William T. Stockhausen <william.stockhausen@noaa.gov>
+Description: Function to simulate sampling a spatial process.
+License: MIT
+Depends: 
+    R (>= 2.10)
+Imports: 
+    dplyr,
+    ggplot2,
+    reshape2,
+    spatstat,
+    spatstat.geom,
+    spatstat.random,
+    tidyr,
+    wtsPlots
+Suggests: 
+    knitr
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown=TRUE)
+RoxygenNote: 7.2.3
+VignetteBuilder: knitr

@@ -1,0 +1,43 @@
+---
+title: "simulateSimplePoissonPointProcesses"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{simulateSimplePoissonPointProcesses}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(rSimSpatialProcessSampling)
+```
+
+```{r run}
+#--simulate sets of simple Poisson point patterns over a range of intensity levels
+#----no clustering
+
+require(spatstat);
+
+data(lstSamplingInfo)
+#--simulation characteristics
+nsim=1000; #--number of simulations/intensity level
+wid = lstSamplingInfo$tdNMFS;                #--NMFS tow distance (window width)
+hgt = lstSamplingInfo$nw.NMFS+lstSamplingInfo$offset+lstSamplingInfo$nw.BSFRF;#--max width (NMFS+BSFRF net widths + offset distance; window height)
+win = owin(xrange=c(0,wid),yrange=c(0,hgt),unitname="km");#--sampling "window"
+aW  = wid*hgt;#--sampling window area (km^2)
+
+lst = list(); #--list of simulation runs
+mnCPUEs = seq(from=25,to=500,by=25);#--mean number crab/km^2
+for (mnCPUE in mnCPUEs){
+  message("Processing CPUE = ",mnCPUE);
+  chr = as.character(mnCPUE);
+  lst[[chr]] = rpoispp(mnCPUE,win=win,nsim=nsim,drop=FALSE);
+}
+#--wtsUtilities::saveObj(lst,fn="rda_SimplePoissonPPSims.RData");
+```

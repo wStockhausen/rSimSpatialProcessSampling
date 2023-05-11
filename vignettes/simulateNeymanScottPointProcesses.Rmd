@@ -1,0 +1,74 @@
+---
+title: "simulateNeymanScottPointProcesses"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{simulateNeymanScottPointProcesses}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(spatstat);
+library(rSimSpatialProcessSampling);
+```
+
+```{r run}
+  #--simulate Neyman-Scott point processes
+  
+  #--create simulated clusters assuming a rotated 2d normal distribution for
+  #----the dispersion within a cluster
+  theta=45; sigx=0.05; sigy=0.01;
+  res = spatstat.random::rNeymanScott(
+              kappa=4,
+              expand=3,
+              rcluster=clusterSims_GenerateNormalCluster,
+              n=1000,
+              sigx=sigx,
+              sigy=sigy,
+              theta=theta,
+              win=spatstat.geom::owin(c(0,1),c(0,1)),
+              lmax=NULL,
+              nsim=9,
+              drop=FALSE,
+              nonempty=TRUE,
+              saveparents=TRUE);
+  resp = clusterPPSims_CreateResultsTibbles(res);#--create tibbles for the clusters and "parents"
+  clusterSims_MakePlots(resp,all_parents=TRUE);
+  
+  
+  #--create simulated clusters assuming a rotated 2d normal distribution for
+  #----the dispersion within a cluster
+  theta=45; sigx=0.05; sigy=0.01;
+  res = rNeymanScott(kappa=10,
+                     expand=3,
+                     rcluster=clusterSims_GenerateNormalCluster,
+                     n=100,
+                     sigx=sigx,
+                     sigy=sigy,
+                     theta=theta,
+                     win=owin(c(0,1),c(0,1)),
+                     lmax=NULL,
+                     nsim=1,
+                     drop=FALSE,
+                     nonempty=TRUE,
+                     saveparents=TRUE);
+  resp1 = clusterSims_CreateResultsTibbles(res);#--create tibbles for the clusters and "parents"
+  #--calculate stats from realizations
+  clusterSims_CalcStats(resp1);
+  
+  qc = quadratcount(res[[1]],nx=100,ny=100);
+  tbl_qc = quadratcount_AsTbl(qc);
+  ggplot(tbl_qc |> dplyr::filter(!is.na(value)),aes(x=x,y=y,width=width,height=height,fill=value)) +
+    geom_tile() +
+    scale_fill_viridis_c(option="plasma",name="number") +
+  #  geom_point(data=resp1$clusters |> dplyr::filter(sim==1),mapping=aes(x=x,y=y,colour=id),inherit.aes=FALSE,shape=".") +
+    guides(colour="none") +
+    wtsPlots::getStdTheme();
+```
