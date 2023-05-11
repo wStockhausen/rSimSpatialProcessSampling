@@ -1,6 +1,6 @@
 ---
 title: "Simulate NeymanScott Point Processes"
-output: bookdown::html_document2
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Simulate NeymanScott Point Processes}
   %\VignetteEngine{knitr::rmarkdown}
