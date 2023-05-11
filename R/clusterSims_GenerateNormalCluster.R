@@ -1,6 +1,8 @@
 #'
 #' @title Generate anisotropic cluster of points based on a normal 2d distribution
+#'
 #' @description Function used for anisotropic cluster generation based on a normal 2d distribution.
+#'
 #' @param x0 - x-coordinate of cluster "center" in "map" coordinates
 #' @param y0 - y-coordinate of cluster "center" in "map" coordinates
 #' @param n - number of points to generate at randomly-selected locations
@@ -11,12 +13,16 @@
 #' @param sigt - std. deviation of cluster axis rotations
 #' @return list with elements "x" and "y", vectors giving coordinates of
 #' generated points in the "map" coordinate system.
-#' @details For each cluster"n" points are generated at locations relative to a cluster "center"
+#'
+#' @details For each cluster "n" points are generated at locations relative to a cluster "center"
 #' using a bivariate normal distribution with 2d axes aligned along the principal
 #' direction of variation and perpindicular to it. The displacement variances along
 #' these axes are given by $sigx^2$ and $sigy^2$. The generated displacements are then
 #' rotated by "theta" and added to the cluster "center" coordinates to yield locations
-#' in "map" (real world) coordinates.
+#' in "map" (real world) coordinates. This function is used as the value for \code{rcluster}
+#' in a call to [spatstat.random::rNeymanScott()] to generate simulated clustered point processes.
+#'
+#' @importFrom stats rnorm
 #'
 #' @export
 #' @md

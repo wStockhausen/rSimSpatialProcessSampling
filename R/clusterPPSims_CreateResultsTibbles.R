@@ -1,6 +1,8 @@
 #'
 #'@title Create parent and cluster tibbles from cluster point process simulation object
 #'
+#'@param res - list of cluster point process simulations
+#'
 #'@return list with elements "parents" and "clusters", each of which is a tbl_df object
 #'with the first containing cluster parent locations by simulation and the second
 #'containing the locations of the points in the clusters, by simulation.

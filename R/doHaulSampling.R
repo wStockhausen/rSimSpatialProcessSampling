@@ -9,7 +9,9 @@
 #' @return tibble with number of individuals caught, area swept, and cpue
 #'
 #' @import dplyr
-
+#' @importFrom stats rbinom
+#' @importFrom tibble tibble
+#'
 #' @export
 #' @md
 doHaulSampling<-function(res,type,xrng,yrng,sel=1){
@@ -25,7 +27,7 @@ doHaulSampling<-function(res,type,xrng,yrng,sel=1){
              dplyr::mutate(N=ifelse(is.na(N),0,N),
                            type=type,
                            .before=1);
-  if (sel<1) dfr$N = rbinom(0*(1:nsims),dfr$N,sel);
+  if (sel<1) dfr$N = stats::rbinom(0*(1:nsims),dfr$N,sel);
   as       = (xrng[2]-xrng[1])*(yrng[2]-yrng[1]);#--area swept
   dfr$as   = as;
   dfr$cpue = dfr$N/as; #--cpue

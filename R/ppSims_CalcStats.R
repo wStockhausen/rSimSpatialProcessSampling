@@ -1,13 +1,16 @@
 #'
 #' @title Compute stats for simulated point process
 #' @description
+#' Function to compute statistics for a simulated point process.
 #'
-#' @params resp - a ppplist or pp_sims_tbls object
+#' @param resp - a ppplist or pp_sims_tbls object
 #'
 #' @return a dataframe
 #'
 #' @import dplyr
-#' @import
+#' @importFrom stats sd var
+#'
+#' @export
 #'
 ppSims_CalcStats<-function(resp){
   if (isa_ppplist(resp)){

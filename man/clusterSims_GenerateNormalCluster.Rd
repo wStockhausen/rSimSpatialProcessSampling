@@ -56,10 +56,11 @@ generated points in the "map" coordinate system.
 Function used for anisotropic cluster generation based on a normal 2d distribution.
 }
 \details{
-For each cluster"n" points are generated at locations relative to a cluster "center"
+For each cluster "n" points are generated at locations relative to a cluster "center"
 using a bivariate normal distribution with 2d axes aligned along the principal
 direction of variation and perpindicular to it. The displacement variances along
 these axes are given by $sigx^2$ and $sigy^2$. The generated displacements are then
 rotated by "theta" and added to the cluster "center" coordinates to yield locations
-in "map" (real world) coordinates.
+in "map" (real world) coordinates. This function is used as the value for \code{rcluster}
+in a call to \code{\link[spatstat.random:rNeymanScott]{spatstat.random::rNeymanScott()}} to generate simulated clustered point processes.
 }

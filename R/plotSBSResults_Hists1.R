@@ -12,6 +12,7 @@
 #'
 #' @import ggplot2
 #' @import tidyr
+#' @importFrom rlang sym
 #' @importFrom wtsPlots getStdTheme
 #' @export
 #'

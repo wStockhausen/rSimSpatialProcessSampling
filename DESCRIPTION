@@ -5,20 +5,24 @@ Version: 2023.05.10
 Author: William T. Stockhausen
 Maintainer: William T. Stockhausen <william.stockhausen@noaa.gov>
 Description: Function to simulate sampling a spatial process.
-License: MIT
+License: MIT + file LICENSE
 Depends: 
     R (>= 2.10)
 Imports: 
     dplyr,
     ggplot2,
     reshape2,
-    spatstat,
-    spatstat.geom,
-    spatstat.random,
+    rlang,
+    tibble,
     tidyr,
     wtsPlots
-Suggests: 
-    knitr
+Suggests:
+    bookdown,
+    kableExtra,
+    knitr,
+    spatstat,
+    spatstat.geom,
+    spatstat.random
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown=TRUE)

@@ -11,8 +11,9 @@
 #' @return list with ggplot2 objects "clusters", "parents",
 #' and (if "all_parents" is TRUE) "all_parents".
 #'
+#' @import dplyr
 #' @import ggplot2
-#' @importFrom wtsPlots getStandardTheme
+#' @importFrom wtsPlots getStdTheme
 #'
 #' @export
 #' @md

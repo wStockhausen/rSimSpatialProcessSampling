@@ -2,9 +2,14 @@
 % Please edit documentation in R/simplePPSims_CreateResultsTibbles.R
 \name{simplePPSims_CreateResultsTibbles}
 \alias{simplePPSims_CreateResultsTibbles}
-\title{Create parent and cluster tibbles from simple point process simulation object}
+\title{Create parent and cluster tibbles from a list of simple point process simulation objects}
 \usage{
 simplePPSims_CreateResultsTibbles(res)
+}
+\arguments{
+\item{res}{\itemize{
+\item list of simple
+}}
 }
 \value{
 Object of type "cluster_sim_tbl", a list with elements
@@ -13,7 +18,7 @@ with the first containing cluster parent locations by simulation and the second
 containing the locations of the points in the clusters, by simulation.
 }
 \description{
-Create parent and cluster tibbles from simple point process simulation object
+Function to create parent and cluster tibbles from a list of simple point process simulation objects
 }
 \details{
 The "parents" and "clusters" elements of the returned list are identical because

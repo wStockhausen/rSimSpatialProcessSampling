@@ -6,6 +6,11 @@
 \usage{
 clusterPPSims_CreateResultsTibbles(res)
 }
+\arguments{
+\item{res}{\itemize{
+\item list of cluster point process simulations
+}}
+}
 \value{
 list with elements "parents" and "clusters", each of which is a tbl_df object
 with the first containing cluster parent locations by simulation and the second

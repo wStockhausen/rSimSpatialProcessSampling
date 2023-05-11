@@ -1,8 +1,8 @@
 ---
-title: "simulateNeymanScottPointProcesses"
-output: rmarkdown::html_vignette
+title: "Simulate NeymanScott Point Processes"
+output: bookdown::html_document2
 vignette: >
-  %\VignetteIndexEntry{simulateNeymanScottPointProcesses}
+  %\VignetteIndexEntry{Simulate NeymanScott Point Processes}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -10,65 +10,99 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.width=6,
+  fig.asp=1,
+  message=FALSE,
+  warning=FALSE
 )
 ```
 
-```{r setup}
+Load the necessary libraries: 
+
+```{r setup,results='hide'}
+library(ggplot2);
 library(spatstat);
 library(rSimSpatialProcessSampling);
 ```
 
-```{r run}
-  #--simulate Neyman-Scott point processes
-  
+```{r runSims}
+  #--simulate a Neyman-Scott point process 9 times
+
   #--create simulated clusters assuming a rotated 2d normal distribution for
   #----the dispersion within a cluster
   theta=45; sigx=0.05; sigy=0.01;
   res = spatstat.random::rNeymanScott(
-              kappa=4,
-              expand=3,
-              rcluster=clusterSims_GenerateNormalCluster,
-              n=1000,
-              sigx=sigx,
-              sigy=sigy,
-              theta=theta,
-              win=spatstat.geom::owin(c(0,1),c(0,1)),
-              lmax=NULL,
-              nsim=9,
-              drop=FALSE,
-              nonempty=TRUE,
-              saveparents=TRUE);
-  resp = clusterPPSims_CreateResultsTibbles(res);#--create tibbles for the clusters and "parents"
-  clusterSims_MakePlots(resp,all_parents=TRUE);
+                            kappa=4,
+                            expand=3,
+                            rcluster=clusterSims_GenerateNormalCluster,
+                            n=1000,
+                            sigx=sigx,
+                            sigy=sigy,
+                            theta=theta,
+                            win=spatstat.geom::owin(c(0,1),c(0,1)),
+                            lmax=NULL,
+                            nsim=9,
+                            drop=FALSE,
+                            nonempty=TRUE,
+                            saveparents=TRUE);
+  #--create tibbles for the clusters and "parents"
+  resp = clusterPPSims_CreateResultsTibbles(res);
+  #--create plots
+  ps = ppSims_MakePlots(resp,all_parents=TRUE);
+```
+
+The realized clusters are shown in Figure \@ref(fig:fig1), with the clusters colored by cluster parent id:
+
+```{r fig1, fig.cap="The realized clusters.",echo=FALSE}
+  print(ps[[1]]);
+```
   
+The realized cluster parents, combined across all simulations, are shown in Figure \@ref(fig:fig2):
+
+```{r fig2, fig.cap="The realized clusters.",echo=FALSE}
+  print(ps[[2]]);
+```
   
-  #--create simulated clusters assuming a rotated 2d normal distribution for
-  #----the dispersion within a cluster
-  theta=45; sigx=0.05; sigy=0.01;
-  res = rNeymanScott(kappa=10,
-                     expand=3,
-                     rcluster=clusterSims_GenerateNormalCluster,
-                     n=100,
-                     sigx=sigx,
-                     sigy=sigy,
-                     theta=theta,
-                     win=owin(c(0,1),c(0,1)),
-                     lmax=NULL,
-                     nsim=1,
-                     drop=FALSE,
-                     nonempty=TRUE,
-                     saveparents=TRUE);
-  resp1 = clusterSims_CreateResultsTibbles(res);#--create tibbles for the clusters and "parents"
-  #--calculate stats from realizations
-  clusterSims_CalcStats(resp1);
+Figure \@ref(fig:fig3) shows all the candidate cluster parents considered for the individual simulations. 
+Because individual clusters may extend across the simulated area boundary (x-coordinate range: [0,1],
+y-coordinate range: [0,1]), cluster parents need to be selected from a larger area that depends on 
+the cluster size.
+```{r fig3, fig.cap=cap,eval.after="fig.cap",echo=FALSE}
+  cap =paste0('Cluster parents considered as candidates for the simulations. ',
+              'Only clusters based on the the "observed" parents are incuded in the simulations.');
+  print(ps[[3]]);
+```
+
+Now analyze the results: 
+
+```{r analyzeSims}
+  #--calculate stats from realizations and print results as a table
+  tbl = ppSims_CalcStats(resp);
+cap = "Statistics from the simulated processes. For a Poisson process, the mean ~ the variance."
+  tbl |> kableExtra::kbl(booktabs=TRUE,digits=1,caption=cap,
+                         col.names=c("type","mean number","variance","std. dev.")) |>
+         kableExtra::kable_styling();
   
-  qc = quadratcount(res[[1]],nx=100,ny=100);
-  tbl_qc = quadratcount_AsTbl(qc);
-  ggplot(tbl_qc |> dplyr::filter(!is.na(value)),aes(x=x,y=y,width=width,height=height,fill=value)) +
+  #--quantify the patterns using 100 x 100 quadrats
+  lst = list();
+  for (i in 1:length(res)){
+    qc = spatstat.geom::quadratcount(res[[i]],nx=100,ny=100);
+    #--turn the results into a tibble
+    lst[[i]] = quadratcount_AsTbl(qc) |> dplyr::filter(!is.na(value)) |> dplyr::mutate(sim=i);
+  }
+  tbl_qcs = dplyr::bind_rows(lst); rm(lst);
+```
+
+The patterns of abundance resulting from the simulated point processes are shown in \@ref(fig:fig4): 
+
+```{r fig4, fig.cap="Abundance patterns based on the simulated point processes within the designated area."}
+  #--plot the results (don't show the underlying clusters)
+  ggplot(tbl_qcs |> dplyr::filter(!is.na(value)),aes(x=x,y=y,width=width,height=height,fill=value)) +
     geom_tile() +
     scale_fill_viridis_c(option="plasma",name="number") +
-  #  geom_point(data=resp1$clusters |> dplyr::filter(sim==1),mapping=aes(x=x,y=y,colour=id),inherit.aes=FALSE,shape=".") +
+  #  geom_point(data=resp$clusters,mapping=aes(x=x,y=y,colour=id),inherit.aes=FALSE,shape=".") +
+    facet_wrap(~sim) + 
     guides(colour="none") +
-    wtsPlots::getStdTheme();
+    wtsPlots::getStdTheme() + theme(axis.title=element_blank());
 ```

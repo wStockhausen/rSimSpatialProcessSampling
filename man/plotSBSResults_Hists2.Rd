@@ -14,6 +14,10 @@ plotSBSResults_Hists2(dfr, type_, val = NULL)
 \item{type_}{\itemize{
 \item flag indicating which type of results to plot
 }}
+
+\item{val}{\itemize{
+\item x location for a vertical line (optional)
+}}
 }
 \value{
 list with two plots

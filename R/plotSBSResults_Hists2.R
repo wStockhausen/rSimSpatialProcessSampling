@@ -5,6 +5,7 @@
 #'
 #' @param dfr - dataframe with results from ??
 #' @param type_ - flag indicating which type of results to plot
+#' @param val - x location for a vertical line (optional)
 #'
 #' @return list with two plots
 #'
@@ -12,6 +13,7 @@
 #'
 #' @import ggplot2
 #' @import tidyr
+#' @importFrom rlang sym
 #' @importFrom wtsPlots getStdTheme
 #' @export
 #'

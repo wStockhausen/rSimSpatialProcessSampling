@@ -1,5 +1,9 @@
 #'
-#'@title Create parent and cluster tibbles from simple point process simulation object
+#'@title Create parent and cluster tibbles from a list of simple point process simulation objects
+#'
+#'@description Function to create parent and cluster tibbles from a list of simple point process simulation objects
+#'
+#'@param res - list of simple
 #'
 #'@return Object of type "cluster_sim_tbl", a list with elements
 #'"parents" and "clusters", each of which is a tbl_df object

@@ -15,29 +15,36 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(rSimSpatialProcessSampling)
+library(spatstat);
+library(rSimSpatialProcessSampling);
 ```
 
 ```{r run}
 #--simulate sets of simple Poisson point patterns over a range of intensity levels
 #----no clustering
 
-require(spatstat);
-
-data(lstSamplingInfo)
+data(lstSamplingInfo);
 #--simulation characteristics
-nsim=1000; #--number of simulations/intensity level
-wid = lstSamplingInfo$tdNMFS;                #--NMFS tow distance (window width)
-hgt = lstSamplingInfo$nw.NMFS+lstSamplingInfo$offset+lstSamplingInfo$nw.BSFRF;#--max width (NMFS+BSFRF net widths + offset distance; window height)
-win = owin(xrange=c(0,wid),yrange=c(0,hgt),unitname="km");#--sampling "window"
-aW  = wid*hgt;#--sampling window area (km^2)
+#----number of simulations/intensity level
+nsim=100; 
+#----set the NMFS tow distance (window width)
+wid = lstSamplingInfo$tdNMFS;                
+#----set the max width (NMFS+BSFRF net widths + offset distance; window height)
+hgt = lstSamplingInfo$nwNMFS+lstSamplingInfo$offset+lstSamplingInfo$nwBSFRF;
+#--set the sampling "window"
+win = spatstat.geom::owin(xrange=c(0,wid),yrange=c(0,hgt),unitname="km");
+#--determine sampling window area (km^2)
+aW  = wid*hgt;
 
-lst = list(); #--list of simulation runs
-mnCPUEs = seq(from=25,to=500,by=25);#--mean number crab/km^2
+#--define the list of simulation runs
+lst = list(); 
+#----set the mean number crab/km^2 for each simulation
+mnCPUEs = seq(from=25,to=100,by=25);
+#----loop over CPUEs
 for (mnCPUE in mnCPUEs){
   message("Processing CPUE = ",mnCPUE);
   chr = as.character(mnCPUE);
-  lst[[chr]] = rpoispp(mnCPUE,win=win,nsim=nsim,drop=FALSE);
+  lst[[chr]] = spatstat.random::rpoispp(mnCPUE,win=win,nsim=nsim,drop=FALSE);
 }
-#--wtsUtilities::saveObj(lst,fn="rda_SimplePoissonPPSims.RData");
+#--now do something with the simulation runs
 ```

@@ -6,9 +6,14 @@
 \usage{
 ppSims_CalcStats(resp)
 }
+\arguments{
+\item{resp}{\itemize{
+\item a ppplist or pp_sims_tbls object
+}}
+}
 \value{
 a dataframe
 }
 \description{
-Compute stats for simulated point process
+Function to compute statistics for a simulated point process.
 }
