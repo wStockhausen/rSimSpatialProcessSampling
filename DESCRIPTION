@@ -1,7 +1,7 @@
 Package: rSimSpatialProcessSampling
 Type: Package
 Title: Simulate sampling a spatial process
-Version: 2023.05.11
+Version: 2023.05.12
 Author: William T. Stockhausen
 Maintainer: William T. Stockhausen <william.stockhausen@noaa.gov>
 Description: Function to simulate sampling a spatial process.
